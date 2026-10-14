@@ -1,0 +1,812 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Bites | Food Delivered</title>
+  <meta name="description" content="Order delicious cafeteria meals, snacks and drinks online. Delivered outside your college campus.">
+
+  <style>
+    :root {
+      --green: #176b45;
+      --lime: #d8f36a;
+      --cream: #fffdf7;
+      --dark: #202820;
+      --muted: #747b72;
+      --border: #e8e9df;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar {
+      background: var(--green);
+      color: white;
+      text-align: center;
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 7%;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .logo span { color: var(--green); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .location { font-size: 13px; color: var(--muted); }
+
+    .cart-button, .primary-button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 18px;
+      background: var(--green);
+      color: white;
+      font-weight: bold;
+    }
+
+    .cart-button:hover, .primary-button:hover {
+      background: #0e5133;
+    }
+
+    .hero {
+      margin: 30px auto 55px;
+      width: 86%;
+      min-height: 370px;
+      border-radius: 28px;
+      padding: 55px;
+      background: #e9f2dc;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      align-items: center;
+      gap: 30px;
+      overflow: hidden;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: white;
+      color: var(--green);
+      padding: 7px 13px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -2px;
+      max-width: 550px;
+    }
+
+    .hero h1 span { color: var(--green); }
+
+    .hero p {
+      color: #5e6b5c;
+      margin: 20px 0 25px;
+      max-width: 420px;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 18px 45px #294b2920;
+    }
+
+    .section {
+      width: 86%;
+      margin: 0 auto 65px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(25px, 3vw, 36px);
+      letter-spacing: -1px;
+    }
+
+    .section-heading p { color: var(--muted); font-size: 14px; }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .category {
+      padding: 10px 18px;
+      border: 1px solid var(--border);
+      background: white;
+      border-radius: 30px;
+      color: var(--dark);
+    }
+
+    .category.active {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .food-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .food-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px #182a1710;
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 185px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .food-info { padding: 17px; }
+
+    .food-info h3 { font-size: 17px; }
+
+    .food-info p {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 6px 0 15px;
+      min-height: 38px;
+    }
+
+    .food-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .price { font-size: 19px; font-weight: 800; }
+
+    .add-button {
+      background: var(--lime);
+      border: none;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-weight: bold;
+    }
+
+    .add-button:hover { background: #c7e653; }
+
+    .delivery-banner {
+      background: #f2f0e6;
+      border-radius: 22px;
+      padding: 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .delivery-banner h2 { font-size: 26px; }
+    .delivery-banner p { color: var(--muted); font-size: 14px; }
+
+    footer {
+      background: #182b20;
+      color: white;
+      padding: 38px 7%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+
+    footer p { color: #c1cec3; font-size: 13px; }
+    footer .logo span { color: var(--lime); }
+
+    /* Cart drawer */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0007;
+      z-index: 20;
+    }
+
+    .overlay.show { display: block; }
+
+    .cart-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: min(440px, 100%);
+      background: white;
+      z-index: 21;
+      padding: 25px;
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform .25s;
+    }
+
+    .cart-panel.show { transform: translateX(0); }
+
+    .cart-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .close-button {
+      border: none;
+      background: #f1f2ed;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 21px;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cart-item small { color: var(--muted); display: block; }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity button {
+      border: 1px solid var(--border);
+      background: white;
+      width: 27px;
+      height: 27px;
+      border-radius: 7px;
+    }
+
+    .cart-total {
+      margin-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .cart-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 12px 0 18px;
+    }
+
+    .checkout-form { margin-top: 25px; }
+    .checkout-form h3 { margin-bottom: 12px; }
+
+    .checkout-form label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 12px 0 5px;
+    }
+
+    .checkout-form input,
+    .checkout-form textarea,
+    .checkout-form select {
+      width: 100%;
+      border: 1px solid #dfe2d8;
+      border-radius: 10px;
+      padding: 12px;
+      background: white;
+    }
+
+    .checkout-form textarea { resize: vertical; min-height: 75px; }
+
+    .checkout-form .primary-button {
+      width: 100%;
+      margin-top: 18px;
+    }
+
+    .empty-cart {
+      color: var(--muted);
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    .notice {
+      display: none;
+      padding: 14px;
+      margin-top: 15px;
+      background: #e9f7e9;
+      border-radius: 10px;
+      color: var(--green);
+      font-size: 14px;
+    }
+
+    @media (max-width: 1000px) {
+      .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero { padding: 35px; }
+    }
+
+    @media (max-width: 650px) {
+      header { padding: 15px 5%; }
+      .logo { font-size: 21px; }
+      .location { display: none; }
+      .cart-button { padding: 10px 12px; }
+      .hero {
+        width: 92%;
+        margin-top: 20px;
+        padding: 26px;
+        grid-template-columns: 1fr;
+      }
+      .hero-image { height: 220px; }
+      .section { width: 92%; }
+      .menu-grid { gap: 12px; }
+      .food-card img { height: 135px; }
+      .food-info { padding: 12px; }
+      .food-info h3 { font-size: 15px; }
+      .food-info p { font-size: 11px; }
+      .price { font-size: 16px; }
+      .add-button { padding: 8px; font-size: 12px; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .delivery-banner { padding: 25px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    Fresh cafeteria food delivered beyond campus · Order online!
+  </div>
+
+  <header>
+    <a class="logo" href="#">Campus<span>Bites.</span></a>
+    <div class="header-right">
+      <div class="location">📍 <span id="locationText">Campus & nearby areas</span></div>
+      <button class="cart-button" onclick="openCart()">
+        🛒 Cart (<span id="cartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <span class="eyebrow">🍽️ YOUR CAMPUS CAFETERIA, ONLINE</span>
+        <h1>Good food.<br>Great <span>mood.</span></h1>
+        <p>
+          Craving your favourite college cafeteria meal?
+          Order online and get it delivered to your hostel,
+          PG, flat or doorstep outside campus.
+        </p>
+        <a href="#menu" class="primary-button">Explore the menu ↓</a>
+      </div>
+      <img class="hero-image"
+        src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85"
+        alt="Freshly prepared food bowl">
+    </section>
+
+    <section class="section" id="menu">
+      <div class="section-heading">
+        <div>
+          <h2>Hungry? Let's fix that.</h2>
+          <p>Fresh favourites at student-friendly prices.</p>
+        </div>
+        <p>💚 Made for student life</p>
+      </div>
+
+      <div class="categories" id="categories">
+        <button class="category active" data-category="All">All food</button>
+        <button class="category" data-category="Meals">🍛 Meals</button>
+        <button class="category" data-category="Snacks">🍔 Snacks</button>
+        <button class="category" data-category="Drinks">🥤 Drinks</button>
+        <button class="category" data-category="Desserts">🍰 Desserts</button>
+      </div>
+
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+
+    <section class="section">
+      <div class="delivery-banner">
+        <div>
+          <h2>Your hostel. Your PG. Your doorstep.</h2>
+          <p>Enter your delivery details at checkout. Availability depends on your area.</p>
+        </div>
+        <button class="primary-button" onclick="openCart()">Order your food →</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <div class="logo">Campus<span>Bites.</span></div>
+      <p>Good food for great college days.</p>
+    </div>
+    <div>
+      <strong>Contact & support</strong>
+      <p>Replace this text with your cafeteria's contact details.</p>
+      <p>© <span id="year"></span> Campus Bites</p>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+  <aside class="cart-panel" id="cartPanel" aria-label="Shopping cart">
+    <div class="cart-heading">
+      <h2>Your cart 🛒</h2>
+      <button class="close-button" onclick="closeCart()" aria-label="Close cart">×</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div id="cartSummary" hidden>
+      <div class="cart-total">
+        <span>Subtotal</span>
+        <span id="cartTotal">₹0</span>
+      </div>
+      <p class="cart-note">
+        Delivery fees, if any, will be confirmed by the cafeteria.
+      </p>
+
+      <form class="checkout-form" id="checkoutForm">
+        <h3>Delivery details</h3>
+
+        <label for="customerName">Full name *</label>
+        <input id="customerName" name="customerName" required
+          autocomplete="name" placeholder="Your name">
+
+        <label for="phone">Phone number *</label>
+        <input id="phone" name="phone" type="tel" required
+          autocomplete="tel" pattern="[0-9+\s()-]{10,16}"
+          placeholder="Your contact number">
+
+        <label for="address">Full delivery address *</label>
+        <textarea id="address" name="address" required
+          autocomplete="street-address"
+          placeholder="Hostel, PG, flat, street and landmark"></textarea>
+
+        <label for="pincode">PIN code *</label>
+        <input id="pincode" name="pincode" required
+          inputmode="numeric" pattern="[0-9]{6}"
+          placeholder="6-digit PIN code">
+
+        <label for="payment">Payment preference</label>
+        <select id="payment" name="payment">
+          <option value="Cash on delivery">Cash on delivery</option>
+          <option value="UPI (confirm with cafeteria)">UPI (confirm with cafeteria)</option>
+        </select>
+
+        <label for="instructions">Special instructions (optional)</label>
+        <textarea id="instructions" name="instructions"
+          placeholder="Room number, less spicy, etc."></textarea>
+
+        <button type="submit" class="primary-button">Place demo order</button>
+        <div class="notice" id="notice" role="status"></div>
+      </form>
+    </div>
+  </aside>
+
+  <script>
+    // EDIT THESE ITEMS TO MATCH YOUR ACTUAL CAFETERIA MENU.
+    const foods = [
+      {
+        id: 1, name: "Veg Fried Rice", category: "Meals",
+        price: 90, emoji: "🍚",
+        description: "Flavourful rice with fresh vegetables.",
+        image: "photo-1512058564366-18510be2db19"
+      },
+      {
+        id: 2, name: "Masala Dosa", category: "Meals",
+        price: 70, emoji: "🥞",
+        description: "Crispy dosa with potato masala.",
+        image: "photo-1668236543090-82eba5ee5976"
+      },
+      {
+        id: 3, name: "Veg Thali", category: "Meals",
+        price: 120, emoji: "🍛",
+        description: "A satisfying Indian meal.",
+        image: "photo-1546833999-b9f581a1996d"
+      },
+      {
+        id: 4, name: "Paneer Roll", category: "Snacks",
+        price: 80, emoji: "🌯",
+        description: "Spiced paneer wrapped in a soft roll.",
+        image: "photo-1626700051175-6818013e1d4f"
+      },
+      {
+        id: 5, name: "Veg Burger", category: "Snacks",
+        price: 65, emoji: "🍔",
+        description: "Crispy patty, veggies and creamy sauce.",
+        image: "photo-1568901346375-23c9450c58cd"
+      },
+      {
+        id: 6, name: "French Fries", category: "Snacks",
+        price: 50, emoji: "🍟",
+        description: "Golden, crispy and perfectly salted.",
+        image: "photo-1573080496219-bb080dd4f877"
+      },
+      {
+        id: 7, name: "Cold Coffee", category: "Drinks",
+        price: 55, emoji: "🥤",
+        description: "Chilled, creamy coffee.",
+        image: "photo-1461023058943-07fcbe16d735"
+      },
+      {
+        id: 8, name: "Fresh Lemonade", category: "Drinks",
+        price: 30, emoji: "🍋",
+        description: "A refreshing citrus drink.",
+        image: "photo-1513558161293-cdaf765edfd7"
+      },
+      {
+        id: 9, name: "Chocolate Brownie", category: "Desserts",
+        price: 60, emoji: "🍫",
+        description: "Rich chocolatey goodness.",
+        image: "photo-1606313564200-e75d5e30476c"
+      },
+      {
+        id: 10, name: "Chocolate Cake", category: "Desserts",
+        price: 75, emoji: "🍰",
+        description: "Soft cake for your sweet cravings.",
+        image: "photo-1578985545062-69928b1d9587"
+      },
+      {
+        id: 11, name: "Chole Rice", category: "Meals",
+        price: 85, emoji: "🍲",
+        description: "Chickpea curry served with rice.",
+        image: "photo-1512058564366-18510be2db19"
+      },
+      {
+        id: 12, name: "Cheese Sandwich", category: "Snacks",
+        price: 55, emoji: "🥪",
+        description: "Toasted sandwich with melted cheese.",
+        image: "photo-1528735602780-2552fd46c7af"
+      }
+    ];
+
+    const cart = {};
+    let activeCategory = "All";
+
+    const money = amount =>
+      new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        maximumFractionDigits: 0
+      }).format(amount);
+
+    function renderMenu() {
+      const grid = document.getElementById("menuGrid");
+      const filtered = activeCategory === "All"
+        ? foods
+        : foods.filter(food => food.category === activeCategory);
+
+      grid.innerHTML = filtered.map(food => `
+        <article class="food-card">
+          <img
+            src="https://images.unsplash.com/${food.image}?auto=format&fit=crop&w=600&q=80"
+            alt="${food.name}"
+            loading="lazy"
+            onerror="this.onerror=null;this.src='https://placehold.co/600x400/e9f2dc/176b45?text=${encodeURIComponent(food.name)}'">
+          <div class="food-info">
+            <h3>${food.emoji} ${food.name}</h3>
+            <p>${food.description}</p>
+            <div class="food-bottom">
+              <span class="price">${money(food.price)}</span>
+              <button class="add-button" onclick="addToCart(${food.id})">
+                + Add
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    document.getElementById("categories").addEventListener("click", event => {
+      const button = event.target.closest("[data-category]");
+      if (!button) return;
+
+      activeCategory = button.dataset.category;
+
+      document.querySelectorAll(".category").forEach(item => {
+        item.classList.toggle("active", item === button);
+      });
+
+      renderMenu();
+    });
+
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      renderCart();
+    }
+
+    function changeQuantity(id, amount) {
+      cart[id] = (cart[id] || 0) + amount;
+      if (cart[id] <= 0) delete cart[id];
+      renderCart();
+    }
+
+    function renderCart() {
+      const entries = foods.filter(food => cart[food.id] > 0);
+      const count = Object.values(cart).reduce((sum, n) => sum + n, 0);
+      const total = entries.reduce(
+        (sum, food) => sum + food.price * cart[food.id], 0
+      );
+
+      document.getElementById("cartCount").textContent = count;
+      document.getElementById("cartTotal").textContent = money(total);
+      document.getElementById("cartSummary").hidden = count === 0;
+
+      document.getElementById("cartItems").innerHTML = count === 0
+        ? '<div class="empty-cart">Your cart is empty.<br><br>Add something delicious! 🍔</div>'
+        : entries.map(food => `
+          <div class="cart-item">
+            <div>
+              <strong>${food.name}</strong>
+              <small>${money(food.price)} each</small>
+              <small>${money(food.price * cart[food.id])} total</small>
+            </div>
+            <div class="quantity">
+              <button onclick="changeQuantity(${food.id}, -1)" aria-label="Remove one">−</button>
+              <span>${cart[food.id]}</span>
+              <button onclick="changeQuantity(${food.id}, 1)" aria-label="Add one">+</button>
+            </div>
+          </div>
+        `).join("");
+    }
+
+    function openCart() {
+      document.getElementById("overlay").classList.add("show");
+      document.getElementById("cartPanel").classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeCart() {
+      document.getElementById("overlay").classList.remove("show");
+      document.getElementById("cartPanel").classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    document.getElementById("checkoutForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const entries = foods.filter(food => cart[food.id] > 0);
+      if (entries.length === 0) {
+        alert("Please add food to your cart first.");
+        return;
+      }
+
+      const form = event.currentTarget;
+      if (!form.reportValidity()) return;
+
+      const customer = new FormData(form);
+      const orderNumber = "CB" + Date.now().toString().slice(-8);
+      const items = entries.map(food =>
+        `${food.name} x ${cart[food.id]} = ${money(food.price * cart[food.id])}`
+      ).join("\n");
+
+      const total = entries.reduce(
+        (sum, food) => sum + food.price * cart[food.id], 0
+      );
+
+      const summary = [
+        "CAMPUS BITES - ORDER REQUEST",
+        "Order reference: " + orderNumber,
+        "",
+        "Customer: " + customer.get("customerName"),
+        "Phone: " + customer.get("phone"),
+        "Address: " + customer.get("address"),
+        "PIN code: " + customer.get("pincode"),
+        "Payment preference: " + customer.get("payment"),
+        "",
+        "ITEMS:",
+        items,
+        "",
+        "Subtotal: " + money(total),
+        "Delivery fee: To be confirmed",
+        "Instructions: " + (customer.get("instructions") || "None")
+      ].join("\n");
+
+      // Demo only: no order is sent to a server.
+      // Connect a backend or a cafeteria WhatsApp number to receive orders.
+      const notice = document.getElementById("notice");
+      notice.style.display = "block";
+      notice.textContent =
+        "Demo order " + orderNumber + " prepared. No real order has been sent or payment taken.";
+
+      let orderOutput = document.getElementById("orderOutput");
+      if (!orderOutput) {
+        orderOutput = document.createElement("textarea");
+        orderOutput.id = "orderOutput";
+        orderOutput.readOnly = true;
+        orderOutput.rows = 12;
+        orderOutput.style.cssText =
+          "width:100%;margin-top:12px;padding:10px;border:1px solid #ddd;border-radius:8px";
+        notice.after(orderOutput);
+      }
+
+      orderOutput.value = summary;
+      orderOutput.setAttribute("aria-label", "Demo order summary");
+
+      let copyButton = document.getElementById("copyOrder");
+      if (!copyButton) {
+        copyButton = document.createElement("button");
+        copyButton.id = "copyOrder";
+        copyButton.type = "button";
+        copyButton.className = "primary-button";
+        copyButton.style.cssText = "width:100%;margin-top:10px";
+        copyButton.textContent = "Copy order details";
+        copyButton.onclick = async () => {
+          try {
+            await navigator.clipboard.writeText(orderOutput.value);
+            copyButton.textContent = "Copied!";
+          } catch {
+            orderOutput.select();
+            document.execCommand("copy");
+            copyButton.textContent = "Select and copy if needed";
+          }
+        };
+        orderOutput.after(copyButton);
+      }
+
+      notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    renderMenu();
+    renderCart();
+  </script>
+</body>
+</html>
